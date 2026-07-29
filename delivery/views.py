@@ -232,6 +232,7 @@ class OrderAssignCourierView(StaffRequiredMixin, generic.UpdateView):
 class BuyerListView(LoginRequiredMixin, generic.ListView):
     model = User
     paginate_by = 10
+    template_name = "delivery/buyer_list.html"
     context_object_name = "buyer_list"
     queryset = (
         User.objects
@@ -244,6 +245,7 @@ class BuyerListView(LoginRequiredMixin, generic.ListView):
 class CourierListView(LoginRequiredMixin, generic.ListView):
     model = User
     paginate_by = 10
+    template_name = "delivery/courier_list.html"
     context_object_name = "courier_list"
     queryset = (
         User.objects
