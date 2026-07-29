@@ -9,7 +9,8 @@
       <thead>
         <tr>
           <th>Username</th>
-          <th>Name</th>
+          <th>First name</th>
+          <th>Last name</th>
           <th class="text-end">Orders</th>
         </tr>
       </thead>
@@ -17,7 +18,8 @@
         {% for buyer in buyer_list %}
           <tr>
             <td>{{ buyer.username }}</td>
-            <td class="text-body-secondary">{{ buyer.get_full_name|default:"—" }}</td>
+            <td class="text-body-secondary">{{ buyer.first_name|default:"—" }}</td>
+            <td class="text-body-secondary">{{ buyer.last_name|default:"—" }}</td>
             <td class="text-end">{{ buyer.num_orders }}</td>
           </tr>
         {% empty %}

@@ -1,9 +1,13 @@
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
-from django.urls import reverse
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
+from delivery.forms import SignUpForm
 from delivery.models import Market, Order, Product, User
 
 
@@ -27,29 +31,29 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, "delivery/index.html", context)
 
 
-class MarketListView(generic.ListView):
+class MarketListView(LoginRequiredMixin, generic.ListView):
     model = Market
     paginate_by = 10
     queryset = Market.objects.annotate(num_products=Count("products")).order_by("name")
 
 
-class MarketDetailView(generic.DetailView):
+class MarketDetailView(LoginRequiredMixin, generic.DetailView):
     model = Market
     queryset = Market.objects.prefetch_related("products")
 
 
-class ProductListView(generic.ListView):
+class ProductListView(LoginRequiredMixin, generic.ListView):
     model = Product
     paginate_by = 10
     queryset = Product.objects.select_related("market")
 
 
-class ProductDetailView(generic.DetailView):
+class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     model = Product
     queryset = Product.objects.select_related("market")
 
 
-class OrderListView(generic.ListView):
+class OrderListView(LoginRequiredMixin, generic.ListView):
     model = Order
     paginate_by = 10
     queryset = (
@@ -59,7 +63,7 @@ class OrderListView(generic.ListView):
     )
 
 
-class OrderDetailView(generic.DetailView):
+class OrderDetailView(LoginRequiredMixin, generic.DetailView):
     model = Order
     queryset = (
         Order.objects
@@ -68,7 +72,7 @@ class OrderDetailView(generic.DetailView):
     )
 
 
-class BuyerListView(generic.ListView):
+class BuyerListView(LoginRequiredMixin, generic.ListView):
     model = User
     paginate_by = 10
     template_name = "delivery/buyer_list.html"
@@ -81,7 +85,7 @@ class BuyerListView(generic.ListView):
     )
 
 
-class CourierListView(generic.ListView):
+class CourierListView(LoginRequiredMixin, generic.ListView):
     model = User
     paginate_by = 10
     template_name = "delivery/courier_list.html"
@@ -92,3 +96,23 @@ class CourierListView(generic.ListView):
         .annotate(num_deliveries=Count("deliveries"))
         .order_by("username")
     )
+
+
+class SignUpView(generic.CreateView):
+    form_class = SignUpForm
+    template_name = "registration/signup.html"
+    success_url = reverse_lazy("delivery:index")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("delivery:index")
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, self.object)
+        messages.success(
+            self.request,
+            f"Welcome, {self.object.username}! Your account has been created.",
+        )
+        return response

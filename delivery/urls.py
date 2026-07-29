@@ -10,6 +10,7 @@ from delivery.views import (
     OrderDetailView,
     BuyerListView,
     CourierListView,
+    SignUpView,
 )
 
 
@@ -23,6 +24,7 @@ urlpatterns = [
     path("orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail"),
     path("buyers/", BuyerListView.as_view(), name="buyer-list"),
     path("couriers/", CourierListView.as_view(), name="courier-list"),
+    path("signup/", SignUpView.as_view(), name="signup"),
 ]
 
 app_name = "delivery"

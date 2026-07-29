@@ -113,6 +113,9 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = "delivery.User"
+
+LOGIN_REDIRECT_URL = "delivery:index"
+LOGOUT_REDIRECT_URL = "delivery:index"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
