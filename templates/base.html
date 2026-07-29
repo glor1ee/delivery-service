@@ -34,7 +34,7 @@
 
       <div class="collapse navbar-collapse" id="nav">
         {% with current=request.resolver_match.url_name %}
-          <ul class="navbar-nav me-auto">
+          <ul class="navbar-nav me-auto gap-2">
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2 {% if current == 'market-list' or current == 'market-detail' %}active{% endif %}"
                  href="{% url 'delivery:market-list' %}">
