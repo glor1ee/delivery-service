@@ -1,1 +1,49 @@
 {% extends "base.html" %}
+{% block title %}<title>Delivery service</title>{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-4">Overview</h1>
+
+  <div class="row row-cols-2 row-cols-md-5 g-3 mb-4">
+    {% for label, value, url in cards %}
+      <div class="col">
+        <a href="{{ url }}" class="card text-decoration-none h-100">
+          <div class="card-body">
+            <div class="fs-3 fw-semibold">{{ value }}</div>
+            <div class="text-body-secondary small">{{ label }}</div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <h2 class="h5 mb-3">Latest orders:</h2>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Market</th>
+          <th>Buyer</th>
+          <th>Courier</th>
+          <th class="text-end">$</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in latest_orders %}
+          <tr>
+            <td><a href="{% url 'delivery:order-detail' pk=order.pk %}">#{{ order.pk }}</a></td>
+            <td><a href="{% url 'delivery:market-detail' pk=order.market.pk %}">{{ order.market.name }}</a></td>
+            <td>{{ order.buyer.username|default:"—" }}</td>
+            <td>{{ order.courier.username|default:"not appointed" }}</td>
+            <td class="text-end">{{ order.total_cost|floatformat:2 }}$</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-body-secondary py-4">
+            There are no orders. It's time to order something!
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}<title>Products</title>{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-4">Products</h1>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Market</th>
+          <th class="text-end">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in product_list %}
+          <tr>
+            <td><a href="{% url 'delivery:product-detail' pk=product.pk %}">{{ product.name }}</a></td>
+            <td><a href="{% url 'delivery:market-detail' pk=product.market.pk %}">{{ product.market.name }}</a></td>
+            <td class="text-end">{{ product.price|floatformat:2 }}$</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3" class="text-center text-body-secondary py-4">
+            We have no products! Create market and assign the product for it!
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include "includes/pagination.html" %}
+{% endblock %}

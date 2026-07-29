@@ -1,4 +1,47 @@
 {% extends "base.html" %}
-{% block title %}
-  <title>Orders</title>
+{% block title %}<title>Orders</title>{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-4">Orders</h1>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle" style="table-layout: fixed; min-width: 42rem;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Market</th>
+          <th>Buyer</th>
+          <th>Courier</th>
+          <th class="text-center">Items</th>
+          <th class="text-center">Total price</th>
+          <th class="text-end">Created date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in order_list %}
+          <tr>
+            <td><a href="{% url 'delivery:order-detail' pk=order.pk %}">{{ order.pk }}</a></td>
+            <td><a href="{% url 'delivery:market-detail' pk=order.market.pk %}">{{ order.market.name }}</a></td>
+            <td>{{ order.buyer.username|default:"—" }}</td>
+            <td>
+              {% if order.courier %}
+                {{ order.courier.username }}
+              {% else %}
+                <span class="badge rounded-pill text-bg-secondary">not appointed</span>
+              {% endif %}
+            </td>
+            <td class="text-center">{{ order.items.all|length }}</td>
+            <td class="text-center">{{ order.total_cost|floatformat:2 }}$</td>
+            <td class="text-body-secondary text-end">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7" class="text-center text-body-secondary py-4">
+            There are no orders. Create first order using a button in top!
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include "includes/pagination.html" %}
 {% endblock %}

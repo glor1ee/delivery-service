@@ -8,9 +8,9 @@ from django.db import models
 
 class User(AbstractUser):
     class Role(models.TextChoices):
-        BUYER = "buyer", "Покупатель"
-        COURIER = "courier", "Курьер"
-        ADMIN = "admin", "Администратор"
+        BUYER = "buyer", "Buyer"
+        COURIER = "courier", "Courier"
+        ADMIN = "admin", "Administrator"
 
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.BUYER)
 

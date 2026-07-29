@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}<title>{{ market.name }}</title>{% endblock %}
+
+{% block content %}
+  <a class="d-inline-block mb-3" href="{% url 'delivery:market-list' %}">&larr; Markets</a>
+  <h1 class="h3 mb-4">{{ market.name }}</h1>
+
+  <h2 class="h5 mb-3">Products</h2>
+  <div class="table-responsive mb-4">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th class="text-end">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in market.products.all %}
+          <tr>
+            <td><a href="{% url 'delivery:product-detail' pk=product.pk %}">{{ product.name }}</a></td>
+            <td class="text-end">{{ product.price|floatformat:2 }}$</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="2" class="text-center text-body-secondary py-4">Market has no products, add!</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="h5 mb-3">Orders</h2>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Buyer</th>
+          <th class="text-end">Total price</th>
+          <th class="text-end">Created date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in market.orders.all %}
+          <tr>
+            <td><a href="{% url 'delivery:order-detail' pk=order.pk %}">{{ order.pk }}</a></td>
+            <td>{{ order.buyer.username|default:"—" }}</td>
+            <td class="text-end">{{ order.total_cost|floatformat:2 }}$</td>
+            <td class="text-body-secondary text-end">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-center text-body-secondary py-4">No orders from this market.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

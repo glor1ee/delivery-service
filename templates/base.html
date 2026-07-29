@@ -2,12 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  {% block title %}
-    <title>Title</title>
-  {% endblock %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block title %}<title>Delivery service</title>{% endblock %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous">
+  <script>
+    // светлая/тёмная тема по настройке системы
+    document.documentElement.dataset.bsTheme =
+      window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  </script>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'delivery:index' %}">Delivery service</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="{% url 'delivery:market-list' %}">Markets</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'delivery:product-list' %}">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'delivery:order-list' %}">Orders</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'delivery:buyer-list' %}">Buyers</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'delivery:courier-list' %}">Couriers</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+          crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}<title>Markets</title>{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-4">Available markets</h1>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Market</th>
+          <th class="text-end">Products per market</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for market in market_list %}
+          <tr>
+            <td><a href="{% url 'delivery:market-detail' pk=market.pk %}">{{ market.name }}</a></td>
+            <td class="text-end">{{ market.num_products }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="2" class="text-center text-body-secondary py-4">
+            We have no markets. Create new market using a button in top!
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include "includes/pagination.html" %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}<title>{{ product.name }}</title>{% endblock %}
+
+{% block content %}
+  <a class="d-inline-block mb-3" href="{% url 'delivery:product-list' %}">&larr; Products</a>
+  <h1 class="h3 mb-4">{{ product.name }}</h1>
+
+  <dl class="row mb-4">
+    <dt class="col-sm-3 fw-normal text-body-secondary">Market</dt>
+    <dd class="col-sm-9"><a href="{% url 'delivery:market-detail' pk=product.market.pk %}">{{ product.market.name }}</a></dd>
+    <dt class="col-sm-3 fw-normal text-body-secondary">Price</dt>
+    <dd class="col-sm-9">{{ product.price|floatformat:2 }}$</dd>
+  </dl>
+
+  <h2 class="h5 mb-3">In orders</h2>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th class="text-end">Pricе</th>
+          <th class="text-end">Quantity</th>
+          <th class="text-end">Total price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in product.order_items.all %}
+          <tr>
+            <td><a href="{% url 'delivery:order-detail' pk=item.order.pk %}">#{{ item.order.pk }}</a></td>
+            <td class="text-end">{{ item.price|floatformat:2 }}$</td>
+            <td class="text-end">{{ item.quantity }}</td>
+            <td class="text-end">{{ item.total_cost|floatformat:2 }}$</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-center text-body-secondary py-4">No orders with this product</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
