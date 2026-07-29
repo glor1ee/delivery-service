@@ -4,13 +4,29 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <h1 class="h3 mb-4">New market</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item"><a href="{% url 'delivery:market-list' %}">Markets</a></li>
+          <li class="breadcrumb-item active" aria-current="page">New market</li>
+        </ol>
+      </nav>
 
-      <form method="post" novalidate>
-        {% csrf_token %}
-        {% include "includes/form_fields.html" %}
-        <button type="submit" class="btn btn-primary">Create market</button>
-      </form>
+      <h1 class="h3 mb-4"><i class="bi bi-shop me-2 text-primary"></i>New market</h1>
+
+      <div class="card border">
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            {% include "includes/form_fields.html" %}
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check2 me-1"></i>Create market
+              </button>
+              <a href="{% url 'delivery:market-list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

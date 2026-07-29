@@ -2,34 +2,51 @@
 {% block title %}<title>Markets</title>{% endblock %}
 
 {% block content %}
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">Available markets</h1>
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h1 class="h3 mb-1"><i class="bi bi-shop me-2 text-primary"></i>Available markets</h1>
+      <p class="text-body-secondary small mb-0">Pick a market to see its products and orders.</p>
+    </div>
     {% if user.is_staff %}
-      <a href="{% url 'delivery:market-create' %}" class="btn btn-primary">+ New market</a>
+      <a href="{% url 'delivery:market-create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>New market
+      </a>
     {% endif %}
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Market</th>
-          <th class="text-end">Products per market</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for market in market_list %}
+  <div class="card border">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <td><a href="{% url 'delivery:market-detail' pk=market.pk %}">{{ market.name }}</a></td>
-            <td class="text-end">{{ market.num_products }}</td>
+            <th class="ps-3">Market</th>
+            <th class="text-end pe-3">Products</th>
           </tr>
-        {% empty %}
-          <tr><td colspan="2" class="text-center text-body-secondary py-4">
-            We have no markets. Create new market using a button in top!
-          </td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for market in market_list %}
+            <tr>
+              <td class="ps-3">
+                <a class="fw-semibold text-decoration-none"
+                   href="{% url 'delivery:market-detail' pk=market.pk %}">{{ market.name }}</a>
+              </td>
+              <td class="text-end pe-3">
+                <span class="badge rounded-pill bg-body-secondary text-body-emphasis">
+                  {{ market.num_products }}
+                </span>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="2" class="text-center text-body-secondary py-5">
+                <i class="bi bi-shop fs-1 d-block mb-2 opacity-50"></i>
+                We have no markets yet.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   {% include "includes/pagination.html" %}

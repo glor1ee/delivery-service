@@ -1,8 +1,11 @@
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import transaction
-from django.db.models import Count, ProtectedError
+from django.db.models import Count, DecimalField, F, ProtectedError, Sum
+from django.db.models.functions import Coalesce
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -25,11 +28,16 @@ def index(request: HttpRequest) -> HttpResponse:
     couriers = User.objects.filter(role=User.Role.COURIER)
     context = {
         "cards": [
-            ("Markets", Market.objects.count(), reverse("delivery:market-list")),
-            ("Products", Product.objects.count(), reverse("delivery:product-list")),
-            ("Orders", Order.objects.count(), reverse("delivery:order-list")),
-            ("Buyers", buyers.count(), reverse("delivery:buyer-list")),
-            ("Couriers", couriers.count(), reverse("delivery:courier-list")),
+            {"label": "Markets", "value": Market.objects.count(),
+             "url": reverse("delivery:market-list"), "icon": "bi-shop"},
+            {"label": "Products", "value": Product.objects.count(),
+             "url": reverse("delivery:product-list"), "icon": "bi-box-seam"},
+            {"label": "Orders", "value": Order.objects.count(),
+             "url": reverse("delivery:order-list"), "icon": "bi-receipt"},
+            {"label": "Buyers", "value": buyers.count(),
+             "url": reverse("delivery:buyer-list"), "icon": "bi-people"},
+            {"label": "Couriers", "value": couriers.count(),
+             "url": reverse("delivery:courier-list"), "icon": "bi-bicycle"},
         ],
         "latest_orders": (
             Order.objects
@@ -237,7 +245,14 @@ class BuyerListView(LoginRequiredMixin, generic.ListView):
     queryset = (
         User.objects
         .filter(role=User.Role.BUYER)
-        .annotate(num_orders=Count("orders"))
+        .annotate(
+            num_orders=Count("orders", distinct=True),
+            total_spent=Coalesce(
+                Sum(F("orders__items__price") * F("orders__items__quantity")),
+                Decimal("0.00"),
+                output_field=DecimalField(max_digits=10, decimal_places=2),
+            ),
+        )
         .order_by("username")
     )
 

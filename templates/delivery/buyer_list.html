@@ -2,33 +2,50 @@
 {% block title %}<title>Buyers</title>{% endblock %}
 
 {% block content %}
-  <h1 class="h3 mb-4">Buyers</h1>
+  <div class="mb-4">
+    <h1 class="h3 mb-1"><i class="bi bi-people me-2 text-primary"></i>Buyers</h1>
+    <p class="text-body-secondary small mb-0">Registered buyers with their order history.</p>
+  </div>
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>First name</th>
-          <th>Last name</th>
-          <th class="text-end">Orders</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for buyer in buyer_list %}
+  <div class="card border">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <td>{{ buyer.username }}</td>
-            <td class="text-body-secondary">{{ buyer.first_name|default:"—" }}</td>
-            <td class="text-body-secondary">{{ buyer.last_name|default:"—" }}</td>
-            <td class="text-end">{{ buyer.num_orders }}</td>
+            <th class="ps-3">Username</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th class="text-end">Orders</th>
+            <th class="text-end pe-3">Total spent</th>
           </tr>
-        {% empty %}
-          <tr><td colspan="3" class="text-center text-body-secondary py-4">
-            We have no buyers. Time to register new buyer!
-          </td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for buyer in buyer_list %}
+            <tr>
+              <td class="ps-3">
+                <i class="bi bi-person-circle me-1 text-body-secondary"></i>
+                <span class="fw-semibold">{{ buyer.username }}</span>
+              </td>
+              <td class="text-body-secondary">{{ buyer.first_name|default:"—" }}</td>
+              <td class="text-body-secondary">{{ buyer.last_name|default:"—" }}</td>
+              <td class="text-end">
+                <span class="badge rounded-pill bg-body-secondary text-body-emphasis">
+                  {{ buyer.num_orders }}
+                </span>
+              </td>
+              <td class="text-end pe-3 fw-semibold">{{ buyer.total_spent|floatformat:2 }}$</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-body-secondary py-5">
+                <i class="bi bi-people fs-1 d-block mb-2 opacity-50"></i>
+                We have no buyers. Time to register new buyer!
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   {% include "includes/pagination.html" %}

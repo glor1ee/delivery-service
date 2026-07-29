@@ -4,16 +4,35 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <h1 class="h3 mb-4">Assign courier to order #{{ object.pk }}</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item"><a href="{% url 'delivery:order-list' %}">Orders</a></li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'delivery:order-detail' pk=object.pk %}">#{{ object.pk }}</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Assign courier</li>
+        </ol>
+      </nav>
 
-      <form method="post" novalidate>
-        {% csrf_token %}
-        {% include "includes/form_fields.html" %}
-        <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">Assign</button>
-          <a href="{% url 'delivery:order-detail' pk=object.pk %}" class="btn btn-secondary">Cancel</a>
+      <h1 class="h3 mb-4">
+        <i class="bi bi-person-plus me-2 text-primary"></i>Assign courier to order #{{ object.pk }}
+      </h1>
+
+      <div class="card border">
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            {% include "includes/form_fields.html" %}
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check2 me-1"></i>Assign
+              </button>
+              <a href="{% url 'delivery:order-detail' pk=object.pk %}"
+                 class="btn btn-outline-secondary">Cancel</a>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 {% endblock %}

@@ -2,48 +2,90 @@
 {% block title %}<title>Delivery service</title>{% endblock %}
 
 {% block content %}
-  <h1 class="h3 mb-4">Overview</h1>
+  <div class="p-4 p-md-5 mb-4 rounded-3 bg-body-tertiary border">
+    <div class="col-lg-8">
+      <h1 class="h2 fw-semibold mb-2">
+        {% if user.is_authenticated %}
+          Welcome back, {{ user.username }}
+        {% else %}
+          Delivery service
+        {% endif %}
+      </h1>
+      <p class="text-body-secondary mb-3">
+        Markets, products and orders in one place — place an order, pick one up, or manage the catalogue.
+      </p>
+      {% if user.is_buyer %}
+        <a href="{% url 'delivery:order-create' %}" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-1"></i>New order
+        </a>
+      {% elif not user.is_authenticated %}
+        <a href="{% url 'delivery:signup' %}" class="btn btn-primary">Get started</a>
+      {% endif %}
+    </div>
+  </div>
 
-  <div class="row row-cols-2 row-cols-md-5 g-3 mb-4">
-    {% for label, value, url in cards %}
+  <div class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3 mb-5">
+    {% for card in cards %}
       <div class="col">
-        <a href="{{ url }}" class="card text-decoration-none h-100">
+        <a href="{{ card.url }}" class="card card-stat h-100 text-decoration-none border">
           <div class="card-body">
-            <div class="fs-3 fw-semibold">{{ value }}</div>
-            <div class="text-body-secondary small">{{ label }}</div>
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="text-body-secondary small text-uppercase">{{ card.label }}</span>
+              <i class="bi {{ card.icon }} text-primary fs-5"></i>
+            </div>
+            <div class="fs-2 fw-semibold lh-1">{{ card.value }}</div>
           </div>
         </a>
       </div>
     {% endfor %}
   </div>
 
-  <h2 class="h5 mb-3">Latest orders:</h2>
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Order</th>
-          <th>Market</th>
-          <th>Buyer</th>
-          <th>Courier</th>
-          <th class="text-end">$</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for order in latest_orders %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="h5 mb-0"><i class="bi bi-clock-history me-2"></i>Latest orders</h2>
+    <a href="{% url 'delivery:order-list' %}" class="btn btn-sm btn-outline-secondary">
+      View all <i class="bi bi-arrow-right ms-1"></i>
+    </a>
+  </div>
+
+  <div class="card border">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <td><a href="{% url 'delivery:order-detail' pk=order.pk %}">#{{ order.pk }}</a></td>
-            <td><a href="{% url 'delivery:market-detail' pk=order.market.pk %}">{{ order.market.name }}</a></td>
-            <td>{{ order.buyer.username|default:"—" }}</td>
-            <td>{{ order.courier.username|default:"not appointed" }}</td>
-            <td class="text-end">{{ order.total_cost|floatformat:2 }}$</td>
+            <th class="ps-3">Order</th>
+            <th>Market</th>
+            <th>Buyer</th>
+            <th>Courier</th>
+            <th class="text-end pe-3">Total</th>
           </tr>
-        {% empty %}
-          <tr><td colspan="5" class="text-center text-body-secondary py-4">
-            There are no orders. It's time to order something!
-          </td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for order in latest_orders %}
+            <tr>
+              <td class="ps-3">
+                <a class="fw-semibold text-decoration-none"
+                   href="{% url 'delivery:order-detail' pk=order.pk %}">#{{ order.pk }}</a>
+              </td>
+              <td>
+                <a class="text-decoration-none"
+                   href="{% url 'delivery:market-detail' pk=order.market.pk %}">{{ order.market.name }}</a>
+              </td>
+              <td>{{ order.buyer.username|default:"—" }}</td>
+              <td>
+                {% include "includes/manage_courier.html" %}
+              </td>
+              <td class="text-end pe-3 fw-semibold">{{ order.total_cost|floatformat:2 }}$</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-body-secondary py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                There are no orders. It's time to order something!
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}

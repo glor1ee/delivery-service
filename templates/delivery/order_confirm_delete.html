@@ -4,15 +4,25 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <h1 class="h3 mb-4">Delete order #{{ object.pk }}?</h1>
-      <p class="text-body-secondary">
-        This will permanently remove the order and its {{ object.items.count }} item(s). This cannot be undone.
-      </p>
-      <form method="post" class="d-flex gap-2">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Delete order</button>
-        <a href="{% url 'delivery:order-detail' pk=object.pk %}" class="btn btn-secondary">Cancel</a>
-      </form>
+      <div class="card border border-danger-subtle">
+        <div class="card-body">
+          <h1 class="h4 mb-3 text-danger-emphasis">
+            <i class="bi bi-exclamation-triangle me-2"></i>Delete order #{{ object.pk }}?
+          </h1>
+          <p class="text-body-secondary">
+            This will permanently remove the order and its
+            <strong>{{ object.items.count }}</strong> item(s). This cannot be undone.
+          </p>
+          <form method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+              <i class="bi bi-trash me-1"></i>Delete order
+            </button>
+            <a href="{% url 'delivery:order-detail' pk=object.pk %}"
+               class="btn btn-outline-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

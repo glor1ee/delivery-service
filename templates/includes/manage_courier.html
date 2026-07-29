@@ -1,0 +1,28 @@
+<div class="d-flex align-items-center gap-4">
+                {% if order.courier %}
+                  <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle">
+                    <i class="bi bi-person-check me-1"></i>{{ order.courier.username }}
+                  </span>
+                  {% if user.is_staff %}
+                    <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-outline-primary">
+                      <i class="bi bi-person-plus me-1"></i> Reassign courier
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <span class="badge rounded-pill text-bg-secondary">Not appointed</span>
+
+                  {% if user.is_courier and not order.courier_id %}
+                    <form method="post" action="{% url 'delivery:order-take' pk=order.pk %}" class="m-0">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success">
+                        <i class="bi bi-bag-check me-1"></i>Take
+                      </button>
+                    </form>
+                    {% endif %}
+                    {% if user.is_staff and not order.courier_id %}
+                      <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-outline-primary">
+                        <i class="bi bi-person-plus me-1"></i> Assign courier
+                      </a>
+                    {% endif %}
+                {% endif %}
+                </div>

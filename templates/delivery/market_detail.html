@@ -2,67 +2,98 @@
 {% block title %}<title>{{ market.name }}</title>{% endblock %}
 
 {% block content %}
-  <a class="d-inline-block mb-3" href="{% url 'delivery:market-list' %}">&larr; Markets</a>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{% url 'delivery:market-list' %}">Markets</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ market.name }}</li>
+    </ol>
+  </nav>
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">{{ market.name }}</h1>
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <h1 class="h3 mb-0"><i class="bi bi-shop me-2 text-primary"></i>{{ market.name }}</h1>
     {% if user.is_staff %}
-      <a href="{% url 'delivery:market-delete' pk=market.pk %}" class="btn btn-outline-danger">Delete market</a>
-    {% endif %}
-  </div>
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h5 mb-0">Products</h2>
-    {% if user.is_staff %}
-      <a href="{% url 'delivery:product-create' %}?market={{ market.pk }}" class="btn btn-sm btn-primary">
-        + Add product
+      <a href="{% url 'delivery:market-delete' pk=market.pk %}" class="btn btn-outline-danger">
+        <i class="bi bi-trash me-1"></i>Delete market
       </a>
     {% endif %}
   </div>
-  <div class="table-responsive mb-4">
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th class="text-end">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for product in market.products.all %}
-          <tr>
-            <td><a href="{% url 'delivery:product-detail' pk=product.pk %}">{{ product.name }}</a></td>
-            <td class="text-end">{{ product.price|floatformat:2 }}$</td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="2" class="text-center text-body-secondary py-4">Market has no products, add!</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2 class="h5 mb-0"><i class="bi bi-box-seam me-2"></i>Products</h2>
+    {% if user.is_staff %}
+      <a href="{% url 'delivery:product-create' %}?market={{ market.pk }}"
+         class="btn btn-sm btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Add product
+      </a>
+    {% endif %}
   </div>
 
-  <h2 class="h5 mb-3">Orders</h2>
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Buyer</th>
-          <th class="text-end">Total price</th>
-          <th class="text-end">Created date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for order in market.orders.all %}
+  <div class="card border mb-4">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <td><a href="{% url 'delivery:order-detail' pk=order.pk %}">{{ order.pk }}</a></td>
-            <td>{{ order.buyer.username|default:"—" }}</td>
-            <td class="text-end">{{ order.total_cost|floatformat:2 }}$</td>
-            <td class="text-body-secondary text-end">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+            <th class="ps-3">Product</th>
+            <th class="text-end pe-3">Price</th>
           </tr>
-        {% empty %}
-          <tr><td colspan="4" class="text-center text-body-secondary py-4">No orders from this market.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for product in market.products.all %}
+            <tr>
+              <td class="ps-3">
+                <a class="text-decoration-none"
+                   href="{% url 'delivery:product-detail' pk=product.pk %}">{{ product.name }}</a>
+              </td>
+              <td class="text-end pe-3 fw-semibold">{{ product.price|floatformat:2 }}$</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="2" class="text-center text-body-secondary py-5">
+                <i class="bi bi-box fs-1 d-block mb-2 opacity-50"></i>
+                Market has no products, add!
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="h5 mb-3"><i class="bi bi-receipt me-2"></i>Orders</h2>
+  <div class="card border">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th class="ps-3">#</th>
+            <th>Buyer</th>
+            <th class="text-end">Total price</th>
+            <th class="text-end pe-3">Created date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in market.orders.all %}
+            <tr>
+              <td class="ps-3">
+                <a class="fw-semibold text-decoration-none"
+                   href="{% url 'delivery:order-detail' pk=order.pk %}">{{ order.pk }}</a>
+              </td>
+              <td>{{ order.buyer.username|default:"—" }}</td>
+              <td class="text-end fw-semibold">{{ order.total_cost|floatformat:2 }}$</td>
+              <td class="text-body-secondary text-end pe-3 small">
+                {{ order.created_at|date:"d.m.Y H:i" }}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-body-secondary py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                No orders from this market.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}

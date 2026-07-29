@@ -4,18 +4,31 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <h1 class="h3 mb-4">Delete product "{{ object.name }}"?</h1>
-      <p class="text-body-secondary">
-        This cannot be undone.
-        {% if object.order_items.exists %}
-          <br>This product is already part of an order, so deletion will be blocked until it's removed there.
-        {% endif %}
-      </p>
-      <form method="post" class="d-flex gap-2">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Delete product</button>
-        <a href="{% url 'delivery:product-detail' pk=object.pk %}" class="btn btn-secondary">Cancel</a>
-      </form>
+      <div class="card border border-danger-subtle">
+        <div class="card-body">
+          <h1 class="h4 mb-3 text-danger-emphasis">
+            <i class="bi bi-exclamation-triangle me-2"></i>Delete product "{{ object.name }}"?
+          </h1>
+          <p class="text-body-secondary">This cannot be undone.</p>
+          {% if object.order_items.exists %}
+            <div class="alert alert-warning d-flex align-items-center gap-2">
+              <i class="bi bi-shield-exclamation"></i>
+              <div>
+                This product is already part of an order, so deletion will be blocked
+                until it's removed there.
+              </div>
+            </div>
+          {% endif %}
+          <form method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+              <i class="bi bi-trash me-1"></i>Delete product
+            </button>
+            <a href="{% url 'delivery:product-detail' pk=object.pk %}"
+               class="btn btn-outline-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

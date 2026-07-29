@@ -2,9 +2,16 @@
 {% block title %}<title>Forbidden</title>{% endblock %}
 
 {% block content %}
-  <h1 class="h3 mb-3">403 — Forbidden</h1>
-  <p class="text-body-secondary">
-    {{ exception|default:"You don't have permission to perform this action." }}
-  </p>
-  <a href="{% url 'delivery:index' %}" class="btn btn-primary">Go home</a>
+  <div class="row justify-content-center py-5">
+    <div class="col-12 col-md-8 col-lg-6 text-center">
+      <i class="bi bi-shield-lock text-danger" style="font-size: 3rem;"></i>
+      <h1 class="h3 mt-3 mb-2">403 — Forbidden</h1>
+      <p class="text-body-secondary">
+        {{ exception|default:"You don't have permission to perform this action." }}
+      </p>
+      <a href="{% url 'delivery:index' %}" class="btn btn-primary">
+        <i class="bi bi-house me-1"></i>Go home
+      </a>
+    </div>
+  </div>
 {% endblock %}

@@ -2,59 +2,77 @@
 {% block title %}<title>Orders</title>{% endblock %}
 
 {% block content %}
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">Orders</h1>
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h1 class="h3 mb-1"><i class="bi bi-receipt me-2 text-primary"></i>Orders</h1>
+      <p class="text-body-secondary small mb-0">All orders across every market.</p>
+    </div>
     {% if user.is_buyer %}
-      <a href="{% url 'delivery:order-create' %}" class="btn btn-primary">+ New order</a>
+      <a href="{% url 'delivery:order-create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>New order
+      </a>
     {% endif %}
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle" style="table-layout: fixed; min-width: 42rem;">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Market</th>
-          <th>Buyer</th>
-          <th>Courier</th>
-          <th class="text-center">Items</th>
-          <th class="text-center">Total price</th>
-          <th class="text-end">Created date</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for order in order_list %}
+  <div class="card border">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <td><a href="{% url 'delivery:order-detail' pk=order.pk %}">{{ order.pk }}</a></td>
-            <td><a href="{% url 'delivery:market-detail' pk=order.market.pk %}">{{ order.market.name }}</a></td>
-            <td>{{ order.buyer.username|default:"—" }}</td>
-            <td>
-              {% if order.courier %}
-                {{ order.courier.username }}
-              {% else %}
-                <span class="badge rounded-pill text-bg-secondary">not appointed</span>
-              {% endif %}
-            </td>
-            <td class="text-center">{{ order.items.all|length }}</td>
-            <td class="text-center">{{ order.total_cost|floatformat:2 }}$</td>
-            <td class="text-body-secondary text-end">{{ order.created_at|date:"d.m.Y H:i" }}</td>
-            <td>
-              {% if user.is_courier and not order.courier_id %}
-                <form method="post" action="{% url 'delivery:order-take' pk=order.pk %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-sm btn-success">Take</button>
-                </form>
-              {% endif %}
-            </td>
+            <th class="ps-3">#</th>
+            <th>Market</th>
+            <th>Buyer</th>
+            <th>Courier</th>
+            <th class="text-center">Items</th>
+            <th class="text-end">Total</th>
+            <th>Created</th>
+            <th class="pe-3"></th>
           </tr>
-        {% empty %}
-          <tr><td colspan="8" class="text-center text-body-secondary py-4">
-            There are no orders. Create first order using a button in top!
-          </td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for order in order_list %}
+            <tr>
+              <td class="ps-3">
+                <a class="fw-semibold text-decoration-none"
+                   href="{% url 'delivery:order-detail' pk=order.pk %}">{{ order.pk }}</a>
+              </td>
+              <td>
+                <a class="text-decoration-none"
+                   href="{% url 'delivery:market-detail' pk=order.market.pk %}">
+                  <i class="bi bi-shop me-1 text-body-secondary"></i>{{ order.market.name }}
+                </a>
+              </td>
+              <td>{{ order.buyer.username|default:"—" }}</td>
+              <td>
+                {% include "includes/manage_courier.html" %}
+              </td>
+              <td class="text-center">
+                <span class="badge rounded-pill bg-body-secondary text-body-emphasis">{{ order.items.all|length }}</span>
+              </td>
+              <td class="text-end fw-semibold">{{ order.total_cost|floatformat:2 }}$</td>
+              <td class="text-body-secondary small">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+              <td class="pe-3 text-end">
+                {% if user.is_courier and not order.courier_id %}
+                  <form method="post" action="{% url 'delivery:order-take' pk=order.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="bi bi-bag-check me-1"></i>Take
+                    </button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="8" class="text-center text-body-secondary py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                There are no orders yet.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   {% include "includes/pagination.html" %}
