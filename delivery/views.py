@@ -1,15 +1,23 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import transaction
 from django.db.models import Count, ProtectedError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from delivery.forms import AssignCourierForm, MarketForm, OrderForm, ProductForm, SignUpForm
+from delivery.forms import (
+    AssignCourierForm,
+    MarketForm,
+    OrderForm,
+    OrderProductsForm,
+    ProductForm,
+    SignUpForm,
+)
 from delivery.mixins import BuyerRequiredMixin, CourierRequiredMixin, StaffRequiredMixin
-from delivery.models import Market, Order, Product, User
+from delivery.models import Market, Order, OrderItem, Product, User
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -150,22 +158,40 @@ class OrderDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class OrderCreateView(BuyerRequiredMixin, generic.CreateView):
-    model = Order
-    form_class = OrderForm
+class OrderCreateView(BuyerRequiredMixin, generic.View):
     template_name = "delivery/order_form.html"
 
-    def form_valid(self, form):
-        form.instance.buyer = self.request.user
-        response = super().form_valid(form)
-        messages.success(
-            self.request,
-            f"Order #{self.object.pk} created. Now add some products to it.",
-        )
-        return response
+    @staticmethod
+    def _market_from(value):
+        return Market.objects.filter(pk=value).first() if value and value.isdigit() else None
 
-    def get_success_url(self):
-        return reverse("delivery:order-detail", kwargs={"pk": self.object.pk})
+    def get(self, request):
+        market = self._market_from(request.GET.get("market"))
+        if market is None:
+            return render(request, self.template_name, {"form": OrderForm()})
+
+        products_form = OrderProductsForm(market=market)
+        return render(request, self.template_name, {"market": market, "products_form": products_form})
+
+    def post(self, request):
+        market = self._market_from(request.POST.get("market"))
+        if market is None:
+            messages.error(request, "Choose a market first.")
+            return redirect("delivery:order-create")
+
+        products_form = OrderProductsForm(request.POST, market=market)
+        if products_form.is_valid():
+            with transaction.atomic():
+                order = Order.objects.create(market=market, buyer=request.user)
+                for product, quantity in products_form.selected_items():
+                    OrderItem.objects.create(order=order, product=product, quantity=quantity)
+            messages.success(
+                request,
+                f"Order #{order.pk} created with {len(products_form.selected_items())} item(s).",
+            )
+            return redirect("delivery:order-detail", pk=order.pk)
+
+        return render(request, self.template_name, {"market": market, "products_form": products_form})
 
 
 class OrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):

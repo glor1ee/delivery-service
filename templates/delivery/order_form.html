@@ -3,14 +3,34 @@
 
 {% block content %}
   <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
+    <div class="col-12 col-md-10 col-lg-8">
       <h1 class="h3 mb-4">New order</h1>
 
-      <form method="post" novalidate>
-        {% csrf_token %}
-        {% include "includes/form_fields.html" %}
-        <button type="submit" class="btn btn-primary">Create order</button>
-      </form>
+      {% if market %}
+        <p class="text-body-secondary">
+          Market: <strong>{{ market.name }}</strong>
+          — <a href="{% url 'delivery:order-create' %}">change market</a>
+        </p>
+
+        {% if not products_form.products %}
+          <p class="text-body-secondary">This market has no products yet.</p>
+        {% else %}
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="market" value="{{ market.pk }}">
+
+            <h2 class="h5 mb-3">Products</h2>
+            {% include "includes/form_fields.html" with form=products_form %}
+
+            <button type="submit" class="btn btn-primary mt-2">Create order</button>
+          </form>
+        {% endif %}
+      {% else %}
+        <form method="get">
+          {% include "includes/form_fields.html" %}
+          <button type="submit" class="btn btn-primary">Continue</button>
+        </form>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

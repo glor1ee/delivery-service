@@ -7,6 +7,9 @@ from delivery.models import Market, Order, Product, User
 class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.apply_bootstrap_classes()
+
+    def apply_bootstrap_classes(self):
         for field in self.fields.values():
             css = "form-select" if isinstance(field.widget, forms.Select) else "form-control"
             field.widget.attrs.setdefault("class", css)
@@ -53,6 +56,40 @@ class OrderForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Order
         fields = ("market",)
+
+
+class OrderProductsForm(BootstrapFormMixin, forms.Form):
+    def __init__(self, *args, market, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.market = market
+        self.products = list(market.products.order_by("name"))
+        for product in self.products:
+            self.fields[self.field_name(product)] = forms.IntegerField(
+                required=False,
+                min_value=0,
+                initial=0,
+                label=f"{product.name} ({product.price}$)",
+            )
+
+        self.apply_bootstrap_classes()
+
+    @staticmethod
+    def field_name(product):
+        return f"product_{product.pk}"
+
+    def clean(self):
+        cleaned = super().clean()
+        if not any(cleaned.get(self.field_name(p)) for p in self.products):
+            raise forms.ValidationError("Add at least one product to the order.")
+        return cleaned
+
+    def selected_items(self):
+        items = []
+        for product in self.products:
+            quantity = self.cleaned_data.get(self.field_name(product))
+            if quantity:
+                items.append((product, quantity))
+        return items
 
 
 class AssignCourierForm(BootstrapFormMixin, forms.ModelForm):
