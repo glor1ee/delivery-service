@@ -116,6 +116,13 @@ AUTH_USER_MODEL = "delivery.User"
 
 LOGIN_REDIRECT_URL = "delivery:index"
 LOGOUT_REDIRECT_URL = "delivery:index"
+
+from django.contrib.messages import constants as message_constants
+
+# Bootstrap не знает класса alert-error — только alert-danger
+MESSAGE_TAGS = {
+    message_constants.ERROR: "danger",
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 

@@ -16,6 +16,23 @@
     <dd class="col-sm-9">{{ order.created_at|date:"d.m.Y H:i" }}</dd>
   </dl>
 
+  <div class="d-flex gap-2 mb-4">
+    {% if can_take %}
+      <form method="post" action="{% url 'delivery:order-take' pk=order.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Take this order</button>
+      </form>
+    {% endif %}
+    {% if can_assign_courier %}
+      <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-outline-primary">
+        {% if order.courier_id %}Reassign courier{% else %}Assign courier{% endif %}
+      </a>
+    {% endif %}
+    {% if can_delete %}
+      <a href="{% url 'delivery:order-delete' pk=order.pk %}" class="btn btn-outline-danger">Delete order</a>
+    {% endif %}
+  </div>
+
   <h2 class="h5 mb-3">Order items</h2>
   <div class="table-responsive">
     <table class="table table-hover align-middle">
@@ -39,12 +56,14 @@
           <tr><td colspan="4" class="text-center text-body-secondary py-4">Order has no products.</td></tr>
         {% endfor %}
       </tbody>
+      {% if order.items.all %}
       <tfoot class="table-group-divider fw-semibold">
         <tr>
           <td colspan="3" class="text-end">Total:</td>
           <td class="text-end">{{ order.total_cost|floatformat:2 }}$</td>
         </tr>
       </tfoot>
+      {% endif %}
     </table>
   </div>
 {% endblock %}

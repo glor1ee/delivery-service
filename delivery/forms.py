@@ -1,16 +1,21 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-from delivery.models import User
+from delivery.models import Market, Order, Product, User
 
 
 class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for name, field in self.fields.items():
+        for field in self.fields.values():
             css = "form-select" if isinstance(field.widget, forms.Select) else "form-control"
             field.widget.attrs.setdefault("class", css)
-            if self.is_bound and self[name].errors:
+
+    def full_clean(self):
+        super().full_clean()
+        for name in self.errors:
+            field = self.fields.get(name)
+            if field:
                 field.widget.attrs["class"] += " is-invalid"
 
 
@@ -42,3 +47,32 @@ class SignUpForm(BootstrapFormMixin, UserCreationForm):
 
 class BootstrapAuthenticationForm(BootstrapFormMixin, AuthenticationForm):
     pass
+
+
+class OrderForm(BootstrapFormMixin, forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ("market",)
+
+
+class AssignCourierForm(BootstrapFormMixin, forms.ModelForm):
+    courier = forms.ModelChoiceField(
+        queryset=User.objects.filter(role=User.Role.COURIER).order_by("username"),
+        label="Courier",
+    )
+
+    class Meta:
+        model = Order
+        fields = ("courier",)
+
+
+class MarketForm(BootstrapFormMixin, forms.ModelForm):
+    class Meta:
+        model = Market
+        fields = ("name",)
+
+
+class ProductForm(BootstrapFormMixin, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ("market", "name", "price")

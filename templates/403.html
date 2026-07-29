@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}<title>Forbidden</title>{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-3">403 — Forbidden</h1>
+  <p class="text-body-secondary">
+    {{ exception|default:"You don't have permission to perform this action." }}
+  </p>
+  <a href="{% url 'delivery:index' %}" class="btn btn-primary">Go home</a>
+{% endblock %}

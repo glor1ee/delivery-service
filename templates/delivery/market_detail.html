@@ -3,9 +3,22 @@
 
 {% block content %}
   <a class="d-inline-block mb-3" href="{% url 'delivery:market-list' %}">&larr; Markets</a>
-  <h1 class="h3 mb-4">{{ market.name }}</h1>
 
-  <h2 class="h5 mb-3">Products</h2>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">{{ market.name }}</h1>
+    {% if user.is_staff %}
+      <a href="{% url 'delivery:market-delete' pk=market.pk %}" class="btn btn-outline-danger">Delete market</a>
+    {% endif %}
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Products</h2>
+    {% if user.is_staff %}
+      <a href="{% url 'delivery:product-create' %}?market={{ market.pk }}" class="btn btn-sm btn-primary">
+        + Add product
+      </a>
+    {% endif %}
+  </div>
   <div class="table-responsive mb-4">
     <table class="table table-hover align-middle">
       <thead>
