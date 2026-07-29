@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -50,7 +51,7 @@ class Product(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name} ({self.price}$)"
+        return f"{self.name} ({self.price}$) Market: {self.market.name}"
 
 
 class Order(models.Model):
@@ -82,6 +83,22 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order #{self.pk} ({self.market.name})"
+
+    def clean(self):
+        super().clean()
+        if self.pk and self.items.exclude(product__market=self.market).exists():
+            raise ValidationError({
+                "market": (
+                    "The order already contains products from another market. "
+                    "Remove them before changing the market."
+                )
+            })
+
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
 
     @property
     def total_cost(self):
@@ -122,7 +139,20 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.product.name} x{self.quantity}"
 
+    def clean(self):
+        super().clean()
+        if self.order_id and self.product_id:
+            if self.product.market_id != self.order.market_id:
+                raise ValidationError({
+                    "product": (
+                        f"«{self.product.name}» is sold by "
+                        f"«{self.product.market.name}», "
+                        f"but the order is placed at «{self.order.market.name}»."
+                    )
+                })
+
     def save(self, *args, **kwargs):
+        self.clean()
         if self.price is None:
             self.price = self.product.price
         super().save(*args, **kwargs)
