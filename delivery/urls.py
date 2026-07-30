@@ -25,18 +25,48 @@ from delivery.views import (
 urlpatterns = [
     path("", index, name="index"),
     path("markets/", MarketListView.as_view(), name="market-list"),
-    path("markets/create/", MarketCreateView.as_view(), name="market-create"),
-    path("markets/<int:pk>/", MarketDetailView.as_view(), name="market-detail"),
-    path("markets/<int:pk>/delete/", MarketDeleteView.as_view(), name="market-delete"),
+    path(
+        "markets/create/", MarketCreateView.as_view(), name="market-create",
+    ),
+    path(
+        "markets/<int:pk>/", MarketDetailView.as_view(), name="market-detail",
+    ),
+    path(
+        "markets/<int:pk>/delete/",
+        MarketDeleteView.as_view(),
+        name="market-delete",
+    ),
     path("products/", ProductListView.as_view(), name="product-list"),
-    path("products/create/", ProductCreateView.as_view(), name="product-create"),
-    path("products/<int:pk>/", ProductDetailView.as_view(), name="product-detail"),
-    path("products/<int:pk>/delete/", ProductDeleteView.as_view(), name="product-delete"),
+    path(
+        "products/create/",
+        ProductCreateView.as_view(),
+        name="product-create",
+    ),
+    path(
+        "products/<int:pk>/",
+        ProductDetailView.as_view(),
+        name="product-detail",
+    ),
+    path(
+        "products/<int:pk>/delete/",
+        ProductDeleteView.as_view(),
+        name="product-delete",
+    ),
     path("orders/", OrderListView.as_view(), name="order-list"),
-    path("orders/create/", OrderCreateView.as_view(), name="order-create"),
-    path("orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail"),
-    path("orders/<int:pk>/delete/", OrderDeleteView.as_view(), name="order-delete"),
-    path("orders/<int:pk>/take/", OrderTakeView.as_view(), name="order-take"),
+    path(
+        "orders/create/", OrderCreateView.as_view(), name="order-create",
+    ),
+    path(
+        "orders/<int:pk>/", OrderDetailView.as_view(), name="order-detail",
+    ),
+    path(
+        "orders/<int:pk>/delete/",
+        OrderDeleteView.as_view(),
+        name="order-delete",
+    ),
+    path(
+        "orders/<int:pk>/take/", OrderTakeView.as_view(), name="order-take",
+    ),
     path(
         "orders/<int:pk>/assign-courier/",
         OrderAssignCourierView.as_view(),

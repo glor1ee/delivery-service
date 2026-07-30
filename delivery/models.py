@@ -13,7 +13,9 @@ class User(AbstractUser):
         COURIER = "courier", "Courier"
         ADMIN = "admin", "Administrator"
 
-    role = models.CharField(max_length=20, choices=Role.choices, default=Role.BUYER)
+    role = models.CharField(
+        max_length=20, choices=Role.choices, default=Role.BUYER,
+    )
 
     @property
     def is_buyer(self):
@@ -86,7 +88,10 @@ class Order(models.Model):
 
     def clean(self):
         super().clean()
-        if self.pk and self.items.exclude(product__market=self.market).exists():
+        has_foreign_items = self.pk and self.items.exclude(
+            product__market=self.market,
+        ).exists()
+        if has_foreign_items:
             raise ValidationError({
                 "market": (
                     "The order already contains products from another market. "
@@ -94,15 +99,15 @@ class Order(models.Model):
                 )
             })
 
-
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
 
-
     @property
     def total_cost(self):
-        return sum((item.total_cost for item in self.items.all()), Decimal("0.00"))
+        return sum(
+            (item.total_cost for item in self.items.all()), Decimal("0.00"),
+        )
 
 
 class OrderItem(models.Model):
@@ -143,11 +148,12 @@ class OrderItem(models.Model):
         super().clean()
         if self.order_id and self.product_id:
             if self.product.market_id != self.order.market_id:
+                order_market = self.order.market
                 raise ValidationError({
                     "product": (
                         f"«{self.product.name}» is sold by "
                         f"«{self.product.market.name}», "
-                        f"but the order is placed at «{self.order.market.name}»."
+                        f"but the order is placed at «{order_market.name}»."
                     )
                 })
 

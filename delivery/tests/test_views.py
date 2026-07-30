@@ -463,9 +463,7 @@ class OrderTakeViewTest(BaseViewTest):
         self.client.force_login(self.buyer)
 
         response = self.client.post(
-            reverse("delivery:order-take",
-                    kwargs={"pk": self.order.pk},
-            )
+            reverse("delivery:order-take", kwargs={"pk": self.order.pk})
         )
 
         self.assertEqual(response.status_code, 403)

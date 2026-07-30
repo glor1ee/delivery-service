@@ -21,10 +21,12 @@ from django.urls import path, include
 from delivery.forms import BootstrapAuthenticationForm
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     path(
         "accounts/login/",
-        auth_views.LoginView.as_view(authentication_form=BootstrapAuthenticationForm),
+        auth_views.LoginView.as_view(
+            authentication_form=BootstrapAuthenticationForm,
+        ),
         name="login",
     ),
     path("accounts/", include("django.contrib.auth.urls")),
