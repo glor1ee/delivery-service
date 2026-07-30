@@ -1,0 +1,726 @@
+[
+{
+  "model": "delivery.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$Qm9uSQdMzFs1qkkpqI62Sy$YM3+lj3ELva/vgHhVNuZJXL8E0in+5xZHssSPF+cQKk=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "demo.admin",
+    "first_name": "Demo",
+    "last_name": "Admin",
+    "email": "demo.admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:40.609Z",
+    "role": "admin",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$iBbPmGcaVbJCjurnH0xkTw$pcRkSz+cCgNwoEq0ioRxkmUgOlBFk0iy/T7+QHtbWXg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "olena.k",
+    "first_name": "Olena",
+    "last_name": "Kovalenko",
+    "email": "olena.k@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:40.908Z",
+    "role": "buyer",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$F9QycJ7wJB4aV83rwDINt6$Gukfl56DD9Lxc02+TeXhOfoSZU/rrqnCFR/X94pXXeo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "dmytro.s",
+    "first_name": "Dmytro",
+    "last_name": "Shevchenko",
+    "email": "dmytro.s@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:41.207Z",
+    "role": "buyer",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$A6n9U6QVb1bL9V5xssQtIf$9aY47SnsDcYakvMAuc/8r25tCfKiucIOCz7WVtaoISI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "iryna.b",
+    "first_name": "Iryna",
+    "last_name": "Bondarenko",
+    "email": "iryna.b@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:41.507Z",
+    "role": "buyer",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$qbMhduqH3kUXgVpvNU6yCh$Ob2M6rNXs2YJO9mrnUkryq0EIBzk+2HMzHoNXaSm148=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "andrii.m",
+    "first_name": "Andrii",
+    "last_name": "Melnyk",
+    "email": "andrii.m@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:41.801Z",
+    "role": "buyer",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$1c4JoBefZ1VoS3akN8hqhf$b/S8INgPN6L2G2IxJKVwr1z84neafzCP3mE48Fk/ZnQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sofiia.t",
+    "first_name": "Sofiia",
+    "last_name": "Tkachenko",
+    "email": "sofiia.t@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:42.102Z",
+    "role": "buyer",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$uWKj0oO3cDSX6TqciPS1Ki$SrFavrLMARAOFgtfWQ/lwKQaukaF3fVx54oJowbshB4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "maksym.p",
+    "first_name": "Maksym",
+    "last_name": "Pavlenko",
+    "email": "maksym.p@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:42.409Z",
+    "role": "buyer",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$UHFhya0ilOUxgm5tEeRCD1$vvXCZv5LlToVxwqKPERVivYHVvN348qKbU9ZQuFElbg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "courier.taras",
+    "first_name": "Taras",
+    "last_name": "Boiko",
+    "email": "courier.taras@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:42.701Z",
+    "role": "courier",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$PQxP6J95Y2TorbrJYQpaQN$cmWtLM4V9W1Gh2pF4+UbATfYxK7akPGANECzoonGXWg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "courier.alina",
+    "first_name": "Alina",
+    "last_name": "Savchuk",
+    "email": "courier.alina@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:43.023Z",
+    "role": "courier",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$osLU61jCqjfSoIHTxOguFM$dgmR93yccaKMeeD0dXhyzxvSle5UCJ3YWjjqLGh9XlE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "courier.roman",
+    "first_name": "Roman",
+    "last_name": "Didenko",
+    "email": "courier.roman@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-07-30T10:30:43.354Z",
+    "role": "courier",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "delivery.market",
+  "pk": 1,
+  "fields": {
+    "name": "Fresh Market"
+  }
+},
+{
+  "model": "delivery.market",
+  "pk": 2,
+  "fields": {
+    "name": "Corner Bakery"
+  }
+},
+{
+  "model": "delivery.market",
+  "pk": 3,
+  "fields": {
+    "name": "Harbor Fish & Meat"
+  }
+},
+{
+  "model": "delivery.market",
+  "pk": 4,
+  "fields": {
+    "name": "Pantry Staples"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 1,
+  "fields": {
+    "market": 1,
+    "name": "Whole Milk",
+    "price": "4.19"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 2,
+  "fields": {
+    "market": 1,
+    "name": "Large Eggs",
+    "price": "3.89"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 3,
+  "fields": {
+    "market": 1,
+    "name": "Unsalted Butter",
+    "price": "4.49"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 4,
+  "fields": {
+    "market": 1,
+    "name": "Greek Yogurt",
+    "price": "5.99"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 5,
+  "fields": {
+    "market": 1,
+    "name": "Bananas",
+    "price": "0.62"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 6,
+  "fields": {
+    "market": 2,
+    "name": "Sourdough Loaf",
+    "price": "5.49"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 7,
+  "fields": {
+    "market": 2,
+    "name": "Butter Croissant",
+    "price": "2.75"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 8,
+  "fields": {
+    "market": 2,
+    "name": "Whole Wheat Bread",
+    "price": "3.29"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 9,
+  "fields": {
+    "market": 3,
+    "name": "Atlantic Salmon Fillet",
+    "price": "13.99"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 10,
+  "fields": {
+    "market": 3,
+    "name": "Chicken Breast",
+    "price": "4.99"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 11,
+  "fields": {
+    "market": 3,
+    "name": "Ground Beef",
+    "price": "6.49"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 12,
+  "fields": {
+    "market": 4,
+    "name": "Extra Virgin Olive Oil",
+    "price": "11.99"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 13,
+  "fields": {
+    "market": 4,
+    "name": "Basmati Rice",
+    "price": "5.49"
+  }
+},
+{
+  "model": "delivery.product",
+  "pk": 14,
+  "fields": {
+    "market": 4,
+    "name": "Whole Bean Coffee",
+    "price": "9.99"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 1,
+  "fields": {
+    "market": 3,
+    "buyer": 2,
+    "courier": null,
+    "created_at": "2026-07-29T13:15:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 2,
+  "fields": {
+    "market": 3,
+    "buyer": 3,
+    "courier": 8,
+    "created_at": "2026-07-29T12:35:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 3,
+  "fields": {
+    "market": 4,
+    "buyer": 6,
+    "courier": null,
+    "created_at": "2026-07-29T16:13:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 4,
+  "fields": {
+    "market": 2,
+    "buyer": 4,
+    "courier": 9,
+    "created_at": "2026-07-29T22:52:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 5,
+  "fields": {
+    "market": 1,
+    "buyer": 5,
+    "courier": 10,
+    "created_at": "2026-07-29T14:16:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 6,
+  "fields": {
+    "market": 4,
+    "buyer": 2,
+    "courier": null,
+    "created_at": "2026-07-29T22:16:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 7,
+  "fields": {
+    "market": 3,
+    "buyer": 5,
+    "courier": null,
+    "created_at": "2026-07-29T14:24:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 8,
+  "fields": {
+    "market": 2,
+    "buyer": 5,
+    "courier": null,
+    "created_at": "2026-07-29T18:44:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 9,
+  "fields": {
+    "market": 1,
+    "buyer": 4,
+    "courier": 9,
+    "created_at": "2026-07-29T14:03:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 10,
+  "fields": {
+    "market": 2,
+    "buyer": 5,
+    "courier": 9,
+    "created_at": "2026-07-29T19:08:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 11,
+  "fields": {
+    "market": 3,
+    "buyer": 4,
+    "courier": 8,
+    "created_at": "2026-07-30T10:46:43.667Z"
+  }
+},
+{
+  "model": "delivery.order",
+  "pk": 12,
+  "fields": {
+    "market": 2,
+    "buyer": 7,
+    "courier": null,
+    "created_at": "2026-07-30T11:57:43.667Z"
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "product": 10,
+    "price": "4.99",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 2,
+  "fields": {
+    "order": 2,
+    "product": 10,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 3,
+  "fields": {
+    "order": 2,
+    "product": 11,
+    "price": "6.49",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 4,
+  "fields": {
+    "order": 3,
+    "product": 13,
+    "price": "5.49",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 5,
+  "fields": {
+    "order": 4,
+    "product": 6,
+    "price": "5.49",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 6,
+  "fields": {
+    "order": 5,
+    "product": 4,
+    "price": "5.99",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 7,
+  "fields": {
+    "order": 5,
+    "product": 1,
+    "price": "4.19",
+    "quantity": 3
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 8,
+  "fields": {
+    "order": 5,
+    "product": 2,
+    "price": "3.89",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 9,
+  "fields": {
+    "order": 6,
+    "product": 14,
+    "price": "9.99",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 10,
+  "fields": {
+    "order": 6,
+    "product": 13,
+    "price": "5.49",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 11,
+  "fields": {
+    "order": 6,
+    "product": 12,
+    "price": "11.99",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 12,
+  "fields": {
+    "order": 7,
+    "product": 10,
+    "price": "4.99",
+    "quantity": 3
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 13,
+  "fields": {
+    "order": 7,
+    "product": 11,
+    "price": "6.49",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 14,
+  "fields": {
+    "order": 7,
+    "product": 9,
+    "price": "13.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 15,
+  "fields": {
+    "order": 8,
+    "product": 6,
+    "price": "5.49",
+    "quantity": 3
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 16,
+  "fields": {
+    "order": 8,
+    "product": 8,
+    "price": "3.29",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 17,
+  "fields": {
+    "order": 8,
+    "product": 7,
+    "price": "2.75",
+    "quantity": 3
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 18,
+  "fields": {
+    "order": 9,
+    "product": 1,
+    "price": "4.19",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 19,
+  "fields": {
+    "order": 9,
+    "product": 4,
+    "price": "5.99",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 20,
+  "fields": {
+    "order": 9,
+    "product": 2,
+    "price": "3.89",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 21,
+  "fields": {
+    "order": 10,
+    "product": 6,
+    "price": "5.49",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 22,
+  "fields": {
+    "order": 10,
+    "product": 7,
+    "price": "2.75",
+    "quantity": 3
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 23,
+  "fields": {
+    "order": 10,
+    "product": 8,
+    "price": "3.29",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 24,
+  "fields": {
+    "order": 11,
+    "product": 10,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 25,
+  "fields": {
+    "order": 11,
+    "product": 11,
+    "price": "6.49",
+    "quantity": 2
+  }
+},
+{
+  "model": "delivery.orderitem",
+  "pk": 26,
+  "fields": {
+    "order": 12,
+    "product": 8,
+    "price": "3.29",
+    "quantity": 1
+  }
+}
+]
