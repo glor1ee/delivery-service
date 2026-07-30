@@ -4,7 +4,7 @@
                     <i class="bi bi-person-check me-1"></i>{{ order.courier.username }}
                   </span>
                   {% if user.is_staff %}
-                    <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-outline-primary">
+                    <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-warning">
                       <i class="bi bi-person-plus me-1"></i> Reassign courier
                     </a>
                   {% endif %}
@@ -20,7 +20,7 @@
                     </form>
                     {% endif %}
                     {% if user.is_staff and not order.courier_id %}
-                      <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-outline-primary">
+                      <a href="{% url 'delivery:order-assign-courier' pk=order.pk %}" class="btn btn-success">
                         <i class="bi bi-person-plus me-1"></i> Assign courier
                       </a>
                     {% endif %}
