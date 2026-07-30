@@ -4,3 +4,4 @@ delivery_service/__pycache__/
 delivery/migrations/__pycache__/
 delivery/__pycache__/
 db.sqlite3
+__pycache__/
