@@ -1,0 +1,18 @@
+<form method="get" role="search" class="search-bar mb-3">
+  <div class="input-group input-group-lg">
+    <span class="input-group-text bg-body border-end-0 text-body-secondary">
+      <i class="bi bi-search"></i>
+    </span>
+    <input type="search"
+           class="form-control form-control-lg border-start-0 ps-0"
+           name="{{ search_param }}"
+           value="{{ search_query }}"
+           placeholder="{{ search_placeholder }}">
+    {% if search_query %}
+      <a class="btn btn-outline-secondary" href="{{ request.path }}" title="Clear search">
+        <i class="bi bi-x-lg"></i>
+      </a>
+    {% endif %}
+    <button class="btn btn-primary px-4" type="submit">Search</button>
+  </div>
+</form>

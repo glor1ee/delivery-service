@@ -7,6 +7,8 @@
     <p class="text-body-secondary small mb-0">Registered buyers with their order history.</p>
   </div>
 
+  {% include "includes/search_form.html" %}
+
   <div class="card border">
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
@@ -38,8 +40,14 @@
           {% empty %}
             <tr>
               <td colspan="5" class="text-center text-body-secondary py-5">
-                <i class="bi bi-people fs-1 d-block mb-2 opacity-50"></i>
-                We have no buyers. Time to register new buyer!
+                {% if search_query %}
+                  <i class="bi bi-search fs-1 d-block mb-2 opacity-50"></i>
+                  Nothing matches “{{ search_query }}”.
+                  <a class="d-block mt-2" href="{{ request.path }}">Clear search</a>
+                {% else %}
+                  <i class="bi bi-people fs-1 d-block mb-2 opacity-50"></i>
+                  We have no buyers. Time to register new buyer!
+                {% endif %}
               </td>
             </tr>
           {% endfor %}

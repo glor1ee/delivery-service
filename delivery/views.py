@@ -19,7 +19,12 @@ from delivery.forms import (
     ProductForm,
     SignUpForm,
 )
-from delivery.mixins import BuyerRequiredMixin, CourierRequiredMixin, StaffRequiredMixin
+from delivery.mixins import (
+    BuyerRequiredMixin,
+    CourierRequiredMixin,
+    SearchMixin,
+    StaffRequiredMixin,
+)
 from delivery.models import Market, Order, OrderItem, Product, User
 
 
@@ -48,10 +53,12 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, "delivery/index.html", context)
 
 
-class MarketListView(LoginRequiredMixin, generic.ListView):
+class MarketListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Market
     paginate_by = 10
     queryset = Market.objects.annotate(num_products=Count("products")).order_by("name")
+    search_fields = ("name",)
+    search_placeholder = "Search markets by name"
 
 
 class MarketDetailView(LoginRequiredMixin, generic.DetailView):
@@ -89,10 +96,12 @@ class MarketDeleteView(StaffRequiredMixin, generic.DeleteView):
             return redirect("delivery:market-detail", pk=self.object.pk)
 
 
-class ProductListView(LoginRequiredMixin, generic.ListView):
+class ProductListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Product
     paginate_by = 10
     queryset = Product.objects.select_related("market")
+    search_fields = ("name", )
+    search_placeholder = "Search products by name"
 
 
 class ProductDetailView(LoginRequiredMixin, generic.DetailView):
@@ -135,7 +144,7 @@ class ProductDeleteView(StaffRequiredMixin, generic.DeleteView):
             return redirect("delivery:product-detail", pk=self.object.pk)
 
 
-class OrderListView(LoginRequiredMixin, generic.ListView):
+class OrderListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Order
     paginate_by = 10
     queryset = (
@@ -143,6 +152,9 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
         .select_related("market", "buyer", "courier")
         .prefetch_related("items__product")
     )
+    search_fields = ("market__name", "buyer__username", "courier__username")
+    search_pk = True
+    search_placeholder = "Search orders by #id, market, buyer or courier username"
 
 
 class OrderDetailView(LoginRequiredMixin, generic.DetailView):
@@ -237,11 +249,13 @@ class OrderAssignCourierView(StaffRequiredMixin, generic.UpdateView):
         return reverse("delivery:order-detail", kwargs={"pk": self.object.pk})
 
 
-class BuyerListView(LoginRequiredMixin, generic.ListView):
+class BuyerListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = User
     paginate_by = 10
     template_name = "delivery/buyer_list.html"
     context_object_name = "buyer_list"
+    search_fields = ("username", )
+    search_placeholder = "Search buyers by username"
     queryset = (
         User.objects
         .filter(role=User.Role.BUYER)
@@ -257,11 +271,13 @@ class BuyerListView(LoginRequiredMixin, generic.ListView):
     )
 
 
-class CourierListView(LoginRequiredMixin, generic.ListView):
+class CourierListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = User
     paginate_by = 10
     template_name = "delivery/courier_list.html"
     context_object_name = "courier_list"
+    search_fields = ("username", )
+    search_placeholder = "Search couriers by username"
     queryset = (
         User.objects
         .filter(role=User.Role.COURIER)

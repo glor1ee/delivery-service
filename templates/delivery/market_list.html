@@ -14,6 +14,8 @@
     {% endif %}
   </div>
 
+  {% include "includes/search_form.html" %}
+
   <div class="card border">
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
@@ -39,8 +41,14 @@
           {% empty %}
             <tr>
               <td colspan="2" class="text-center text-body-secondary py-5">
-                <i class="bi bi-shop fs-1 d-block mb-2 opacity-50"></i>
-                We have no markets yet.
+                {% if search_query %}
+                  <i class="bi bi-search fs-1 d-block mb-2 opacity-50"></i>
+                  Nothing matches “{{ search_query }}”.
+                  <a class="d-block mt-2" href="{{ request.path }}">Clear search</a>
+                {% else %}
+                  <i class="bi bi-shop fs-1 d-block mb-2 opacity-50"></i>
+                  We have no markets yet.
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
