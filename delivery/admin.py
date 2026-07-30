@@ -8,10 +8,16 @@ from delivery.models import Market, Order, OrderItem, Product, User
 
 @admin.register(User)
 class DeliveryUserAdmin(UserAdmin):
-    list_display = ("username", "first_name", "last_name", "role", "is_staff")
+    list_display = (
+        "username", "first_name", "last_name", "role", "is_staff",
+    )
     list_filter = UserAdmin.list_filter + ("role",)
-    fieldsets = UserAdmin.fieldsets + (("Role", {"fields": ("role",)}),)
-    add_fieldsets = UserAdmin.add_fieldsets + (("Role", {"fields": ("role",)}),)
+    fieldsets = UserAdmin.fieldsets + (
+        ("Role", {"fields": ("role",)}),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ("Role", {"fields": ("role",)}),
+    )
 
 
 @admin.register(Market)
@@ -28,7 +34,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class OrderItemInlineFormSet(forms.BaseInlineFormSet):
-    """Ловит товар чужого магазина до сохранения: заказа ещё нет, магазин уже известен.
+    """Ловит товар чужого магазина до сохранения: заказа ещё нет,
+    магазин уже известен.
 
     Без этой проверки чужой товар на странице создания доходит до
     OrderItem.save() и роняет админку необработанным ValidationError.
@@ -44,10 +51,11 @@ class OrderItemInlineFormSet(forms.BaseInlineFormSet):
                 continue
             product = form.cleaned_data.get("product")
             if product and product.market_id != market_id:
+                order_market = self.instance.market
                 form.add_error(
                     "product",
                     f"«{product.name}» is sold by «{product.market.name}», "
-                    f"but the order is placed at «{self.instance.market.name}».",
+                    f"but the order is placed at «{order_market.name}».",
                 )
 
 

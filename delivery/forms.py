@@ -11,7 +11,8 @@ class BootstrapFormMixin:
 
     def apply_bootstrap_classes(self):
         for field in self.fields.values():
-            css = "form-select" if isinstance(field.widget, forms.Select) else "form-control"
+            is_select = isinstance(field.widget, forms.Select)
+            css = "form-select" if is_select else "form-control"
             field.widget.attrs.setdefault("class", css)
 
     def full_clean(self):
@@ -44,7 +45,9 @@ class SignUpForm(BootstrapFormMixin, UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data["email"].lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError("A user with this email already exists.")
+            raise forms.ValidationError(
+                "A user with this email already exists.",
+            )
         return email
 
 
@@ -80,7 +83,9 @@ class OrderProductsForm(BootstrapFormMixin, forms.Form):
     def clean(self):
         cleaned = super().clean()
         if not any(cleaned.get(self.field_name(p)) for p in self.products):
-            raise forms.ValidationError("Add at least one product to the order.")
+            raise forms.ValidationError(
+                "Add at least one product to the order.",
+            )
         return cleaned
 
     def selected_items(self):
@@ -94,7 +99,9 @@ class OrderProductsForm(BootstrapFormMixin, forms.Form):
 
 class AssignCourierForm(BootstrapFormMixin, forms.ModelForm):
     courier = forms.ModelChoiceField(
-        queryset=User.objects.filter(role=User.Role.COURIER).order_by("username"),
+        queryset=(
+            User.objects.filter(role=User.Role.COURIER).order_by("username")
+        ),
         label="Courier",
     )
 

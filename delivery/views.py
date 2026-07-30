@@ -56,7 +56,10 @@ def index(request: HttpRequest) -> HttpResponse:
 class MarketListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Market
     paginate_by = 10
-    queryset = Market.objects.annotate(num_products=Count("products")).order_by("name")
+    queryset = (
+        Market.objects.annotate(num_products=Count("products"))
+        .order_by("name")
+    )
     search_fields = ("name",)
     search_placeholder = "Search markets by name"
 
@@ -91,7 +94,8 @@ class MarketDeleteView(StaffRequiredMixin, generic.DeleteView):
         except ProtectedError:
             messages.warning(
                 self.request,
-                f"Can't delete “{self.object.name}” — it still has orders placed at it.",
+                f"Can't delete “{self.object.name}” — "
+                f"it still has orders placed at it.",
             )
             return redirect("delivery:market-detail", pk=self.object.pk)
 
@@ -122,11 +126,15 @@ class ProductCreateView(StaffRequiredMixin, generic.CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f"Product “{self.object.name}” created.")
+        messages.success(
+            self.request, f"Product “{self.object.name}” created.",
+        )
         return response
 
     def get_success_url(self):
-        return reverse("delivery:product-detail", kwargs={"pk": self.object.pk})
+        return reverse(
+            "delivery:product-detail", kwargs={"pk": self.object.pk},
+        )
 
 
 class ProductDeleteView(StaffRequiredMixin, generic.DeleteView):
@@ -139,7 +147,8 @@ class ProductDeleteView(StaffRequiredMixin, generic.DeleteView):
         except ProtectedError:
             messages.warning(
                 self.request,
-                f"Can't delete “{self.object.name}” — it's already part of an order.",
+                f"Can't delete “{self.object.name}” — "
+                f"it's already part of an order.",
             )
             return redirect("delivery:product-detail", pk=self.object.pk)
 
@@ -154,7 +163,9 @@ class OrderListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     )
     search_fields = ("market__name", "buyer__username", "courier__username")
     search_pk = True
-    search_placeholder = "Search orders by #id, market, buyer or courier username"
+    search_placeholder = (
+        "Search orders by #id, market, buyer or courier username"
+    )
 
 
 class OrderDetailView(LoginRequiredMixin, generic.DetailView):
@@ -183,7 +194,9 @@ class OrderCreateView(BuyerRequiredMixin, generic.View):
 
     @staticmethod
     def _market_from(value):
-        return Market.objects.filter(pk=value).first() if value and value.isdigit() else None
+        if not (value and value.isdigit()):
+            return None
+        return Market.objects.filter(pk=value).first()
 
     def get(self, request):
         market = self._market_from(request.GET.get("market"))
@@ -191,7 +204,8 @@ class OrderCreateView(BuyerRequiredMixin, generic.View):
             return render(request, self.template_name, {"form": OrderForm()})
 
         products_form = OrderProductsForm(market=market)
-        return render(request, self.template_name, {"market": market, "products_form": products_form})
+        context = {"market": market, "products_form": products_form}
+        return render(request, self.template_name, context)
 
     def post(self, request):
         market = self._market_from(request.POST.get("market"))
@@ -203,18 +217,24 @@ class OrderCreateView(BuyerRequiredMixin, generic.View):
         if products_form.is_valid():
             with transaction.atomic():
                 order = Order.objects.create(market=market, buyer=request.user)
-                for product, quantity in products_form.selected_items():
-                    OrderItem.objects.create(order=order, product=product, quantity=quantity)
+                items = products_form.selected_items()
+                for product, quantity in items:
+                    OrderItem.objects.create(
+                        order=order, product=product, quantity=quantity,
+                    )
             messages.success(
                 request,
-                f"Order #{order.pk} created with {len(products_form.selected_items())} item(s).",
+                f"Order #{order.pk} created with {len(items)} item(s).",
             )
             return redirect("delivery:order-detail", pk=order.pk)
 
-        return render(request, self.template_name, {"market": market, "products_form": products_form})
+        context = {"market": market, "products_form": products_form}
+        return render(request, self.template_name, context)
 
 
-class OrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+class OrderDeleteView(
+    LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView,
+):
     model = Order
     success_url = reverse_lazy("delivery:order-list")
 
@@ -223,7 +243,8 @@ class OrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteVie
         user = self.request.user
         if user.is_staff:
             return True
-        return user.is_buyer and order.buyer_id == user.pk and order.courier_id is None
+        is_owner = user.is_buyer and order.buyer_id == user.pk
+        return is_owner and order.courier_id is None
 
     def form_valid(self, form):
         pk = self.object.pk
@@ -239,9 +260,10 @@ class OrderAssignCourierView(StaffRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        courier = self.object.courier.username
         messages.success(
             self.request,
-            f"Courier {self.object.courier.username} assigned to order #{self.object.pk}.",
+            f"Courier {courier} assigned to order #{self.object.pk}.",
         )
         return response
 
@@ -308,7 +330,9 @@ class SignUpView(generic.CreateView):
 
 class OrderTakeView(CourierRequiredMixin, generic.View):
     def post(self, request, pk):
-        updated = Order.objects.filter(pk=pk, courier__isnull=True).update(courier=request.user)
+        updated = Order.objects.filter(
+            pk=pk, courier__isnull=True,
+        ).update(courier=request.user)
         if updated:
             messages.success(request, f"You are now delivering order #{pk}.")
         else:
