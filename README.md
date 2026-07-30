@@ -111,3 +111,7 @@ python manage.py test
 
 Tests live in `delivery/tests/` (`test_models.py`, `test_forms.py`,
 `test_views.py`) - models, forms, and role-based permissions.
+
+## ER Diagram 
+
+![img.png](img.png)
