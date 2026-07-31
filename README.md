@@ -4,6 +4,11 @@ A learning Django project: a marketplace with delivery. A buyer picks a
 market and products and places an order, a courier picks up free orders,
 and an administrator manages the catalogue and assigns couriers by hand.
 
+**Live demo:** https://delivery-service-iqpm.onrender.com (Render free
+tier, spins down after inactivity - the first request can take up to a
+minute). Demo accounts are listed under "Loading sample data" below,
+password `demo-pass-12345` for all of them.
+
 ## Features
 
 - **User roles** - `buyer`, `courier`, `admin`, plus the regular Django
