@@ -1,1 +1,15 @@
 Django==6.0.7
+
+# Deployment (Render.com): Postgres driver, DATABASE_URL parsing,
+# WSGI server, static file serving, local .env loading
+psycopg2-binary==2.9.12
+dj-database-url==3.1.2
+gunicorn==26.0.0
+whitenoise==6.12.0
+python-dotenv==1.2.2
+
+# Linting
+flake8
+flake8-quotes
+flake8-variables-names
+pep8-naming

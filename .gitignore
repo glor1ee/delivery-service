@@ -5,3 +5,5 @@ delivery/migrations/__pycache__/
 delivery/__pycache__/
 db.sqlite3
 __pycache__/
+.env
+staticfiles/

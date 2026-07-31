@@ -8,3 +8,6 @@ exclude =
     **migrations
     .venv
     tests
+per-file-ignores =
+    delivery_service/settings/dev.py:E402,F403,F405
+    delivery_service/settings/prod.py:F403,F405

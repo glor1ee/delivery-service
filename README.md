@@ -51,17 +51,32 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-`requirements.txt` pins a single package - Django itself; everything
-else (`asgiref`, `sqlparse`, `tzdata`) comes along as its own dependency.
+`requirements.txt` pins Django plus the packages needed to deploy on
+Render (`psycopg2-binary`, `dj-database-url`, `gunicorn`, `whitenoise`,
+`python-dotenv`) and to lint (`flake8` and friends). None of the
+deployment packages are required to just run the project locally with
+SQLite.
 
 ## Configuration
 
-There is no `.env` file for this project - nothing secret to configure.
-The one setting worth knowing about, in `delivery_service/settings.py`:
+Settings are split into a package, `delivery_service/settings/`:
+
+- `base.py` - shared config, imported by both of the below.
+- `dev.py` - local development: SQLite, `DEBUG = True`, no real
+  secrets required. This is the default (`manage.py`, `wsgi.py`, and
+  `asgi.py` all point `DJANGO_SETTINGS_MODULE` here).
+- `prod.py` - Render.com: `DEBUG = False`, Postgres via `DATABASE_URL`,
+  and every secret read from the environment with no insecure fallback.
+
+`dev.py` loads a local `.env` file if one exists (via `python-dotenv`),
+so you can override anything without touching settings code. Copy
+`.env.example` to `.env` if you want that; it's entirely optional
+locally since everything already has a safe default.
+
+One setting worth knowing about regardless of environment:
 
 - `AUTH_USER_MODEL = "delivery.User"` - a custom user model with a
   `role` field. This can only be changed **before** the first migration.
-- `DEBUG = True` - fine for local development, not for production.
 
 ## Running the server
 
@@ -111,6 +126,35 @@ python manage.py test
 
 Tests live in `delivery/tests/` (`test_models.py`, `test_forms.py`,
 `test_views.py`) - models, forms, and role-based permissions.
+
+## Deployment (Render.com)
+
+The project deploys as a Render Blueprint (`render.yaml`), which
+provisions a free Postgres database and a free web service together.
+
+1. Push the repo to GitHub.
+2. In the Render dashboard: New -> Blueprint, point it at the repo.
+   Render reads `render.yaml` and creates both the database and the
+   web service.
+3. `DJANGO_SECRET_KEY` is generated automatically by the blueprint;
+   `DATABASE_URL` is wired to the new database automatically;
+   `RENDER_EXTERNAL_HOSTNAME` is set automatically by Render itself.
+   Nothing to fill in by hand.
+4. First deploy runs `build.sh` (`pip install`, `collectstatic`,
+   `migrate`), then starts `gunicorn delivery_service.wsgi:application`.
+
+Relevant files:
+
+- `render.yaml` - the Blueprint: web service + database + env vars.
+- `build.sh` - build step run on every deploy.
+- `.python-version` - pins the Python version Render builds with.
+- `delivery_service/settings/prod.py` - `DEBUG = False`, Postgres via
+  `dj-database-url`, HTTPS redirect/secure cookies, hashed+compressed
+  static files via WhiteNoise.
+
+To create a superuser on the deployed site, open a shell for the
+service from the Render dashboard and run
+`python manage.py createsuperuser`.
 
 ## ER Diagram 
 
