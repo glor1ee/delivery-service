@@ -141,7 +141,9 @@ provisions a free Postgres database and a free web service together.
    `RENDER_EXTERNAL_HOSTNAME` is set automatically by Render itself.
    Nothing to fill in by hand.
 4. First deploy runs `build.sh` (`pip install`, `collectstatic`,
-   `migrate`), then starts `gunicorn delivery_service.wsgi:application`.
+   `migrate`, `loaddata demo_data`), then starts
+   `gunicorn delivery_service.wsgi:application`. The demo accounts
+   from "Loading sample data" above work on the live site too.
 
 Relevant files:
 
