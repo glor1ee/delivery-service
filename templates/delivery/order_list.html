@@ -27,8 +27,7 @@
             <th>Courier</th>
             <th class="text-center">Items</th>
             <th class="text-end">Total</th>
-            <th>Created</th>
-            <th class="pe-3"></th>
+            <th class="text-end">Created</th>
           </tr>
         </thead>
         <tbody>
@@ -52,17 +51,7 @@
                 <span class="badge rounded-pill bg-body-secondary text-body-emphasis">{{ order.items.all|length }}</span>
               </td>
               <td class="text-end fw-semibold">{{ order.total_cost|floatformat:2 }}$</td>
-              <td class="text-body-secondary small">{{ order.created_at|date:"d.m.Y H:i" }}</td>
-              <td class="pe-3 text-end">
-                {% if user.is_courier and not order.courier_id %}
-                  <form method="post" action="{% url 'delivery:order-take' pk=order.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-success">
-                      <i class="bi bi-bag-check me-1"></i>Take
-                    </button>
-                  </form>
-                {% endif %}
-              </td>
+              <td class="text-body-secondary small text-end">{{ order.created_at|date:"d.m.Y H:i" }}</td>
             </tr>
           {% empty %}
             <tr>
